@@ -1,12 +1,17 @@
+%\documentclass[landscape]{slides}
+%\usepackage{amssymb,amsmath,amsthm}
+%\pagestyle{empty}
 
+\usepackage{datetime}
 \documentclass{article}
 \usepackage[utf8]{inputenc}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \lhead{CRI Report Generator}
-\rhead{UIC Center for Research Informatics}
-\rfoot{page \thepage}
-\lfoot{ \date{ }}
+\lfoot{UIC Center for Research Informatics}
+\rhead{page \thepage}
+\rfoot{ \today}
+\cfoot{}
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0.4pt}
 \usepackage{tikz}
@@ -19,12 +24,14 @@ cross/.default={1pt}}
 
 \usepackage{listings}
 \usepackage{color}
+\usepackage{graphicx}
+\usepackage{wrapfig}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
-\lstset{frame=tb,
+\lstset{
   language=Java,
   aboveskip=3mm,
   belowskip=3mm,
@@ -41,6 +48,9 @@ cross/.default={1pt}}
   tabsize=3
 }
  
+\usepackage{titling}
+\setlength{\droptitle}{-2cm}
+%\pagestyle{headings}
 \title{CRI Report Generator}
 \author{Gobind Singh}
 \date{ }
@@ -52,60 +62,147 @@ cross/.default={1pt}}
 \tableofcontents
  
 \section{Requirements}
- 
-The Center for Research Informatics (CRI) requires a report generation script to automatically summarize the process and results of its analysis.  The solution should fullfill the following requirements:
+
+\indent The Center for Research Informatics (CRI) requires reports, which summarize its process, results, and analysis, to be authored in a simplified manner.  The solution should fullfill the following requirements:
 \begin{enumerate}
-    \item Pull in configuration file information into the output report file.
-    \item Validate predefined set memberships, alert if not valid. 
-    \item Embed linked figures (jpg,png,pdf), data(bam,fastq), and tables(csv) into the report.
-    \item Formating table of contents, citations, and sections.
-    \item Styling such as logo, title, and date. 
+    \item The information specified in static config files(relating to analysis methods and reference databases) should be output to the final report, without additional inputs requirements in the authored report.
+    \item Alerts for the report author, validating set memberships of analysis techniques and their methods, in cases such as mispecification or spelling error.
+    \item Figures, which can link to a variety of formats such as image(jpg,png,pdf), data(bam,fastq), and tables(csv), should be available.
+    \item Formating relating to table of contents with links, numbered citations, and sections styled with logo, title, and date
 \end{enumerate}
 
- 
+%\pagebreak 
 \section{Design Overview}
-The CRI Report Generator solution will rely on XSLT, to transform xml report and configuration files to the required html output format.  XSLT is domain specific to XML and supports XPath to select DOM elements.  XSLT is the ideal solution for static html generation from xml and configuration files.  An XML schema can be created to allow authors to write the report content in a simplified manner.  Further, the xml schema can be validated by xslt, which can assert errors.  Finally, CSS can be used for styling of html elements.  
+\\
+\begin{wrapfigure}{r}{0.25\textwidth} %this figure will be at the right
+    \vspace{-20}
+    \centering
+%    \includegraphics[lineheight=5,width=0.25\textwidth]
+    \includegraphics[width=2cm,height=3cm,keepaspectratio]
+{process}
+\end{wrapfigure}
+\\
+Extensible Stylesheet Language Transformations (XSLT) will be used to transform Extensible Markup Language(XML) documents to the required form.  The XML documents will consist of configuration files and the authored report file.  An XSLT stylesheet specifies a report's format and structure; a cascading stylesheet specifies design and style; and a document schema specifies valid document relationships.  
+
+\\
+XML is a free, platform neutral, human-readable data transfer protocol.  Although it is larger and more verbose than other formats, such as JSON or binary, it provides better portability.  XSLT is domain specific to XML and is capable of using XPath functions to select DOM elements.  XSLT is the ideal solution for static html generation from xml and configuration files.  An XML schema can be created to allow authors to write the report content in a simplified manner.  Further, the xml schema can be validated by xslt, which can assert errors.  Finally, CSS separates the style from the document data, thus providing clearer design.   
 
 
-\begin{tikzpicture}
-\filldraw[black] (0,2.5) circle (1.5pt) node[anchor=west] {config files};
-\filldraw[black] (0,2) circle (1.5pt) node[anchor=west] {schema};
-\filldraw[black] (0,1.5) circle (1.5pt) node[anchor=west] {authored xml report};
+% \includegraphics[scale=.5]{process}
 
-\draw[very thick,->] (3.75,2.2) -- (4.75,2.2) node[anchor=west] {XSLT};
-
-\draw[blue, very thick] (7,0.5)rectangle (8.2,2.2);
-\filldraw[black] (7,2.5) circle (1.5pt) node[anchor=west] {html output};
-\end{tikzpicture}
+%\begin{tikzpicture}
+%\filldraw[black] (0,2.5) circle (1.5pt) node[anchor=west] {config files};
+%\filldraw[black] (0,2) circle (1.5pt) node[anchor=west] {schema};
+%\filldraw[black] (0,1.5) circle (1.5pt) node[anchor=west] {authored xml report};
+%
+%\draw[very thick,->] (3.75,2.2) -- (4.75,2.2) node[anchor=west] {XSLT};
+%
+%\draw[blue, very thick] (7,0.5)rectangle (8.2,2.2);
+%\filldraw[black] (7,2.5) circle (1.5pt) node[anchor=west] {html output};
+%\end{tikzpicture}
 
 
 \addcontentsline{toc}{section}{\protect\numberline{}Scope}%
 \section*{Scope}
-The main limitation of this approach is in attempts to use in web applications.  For the purpose of serving html files a standard web solution should be found.  For the purpose of transforming xml to html, xslt is the standard solution.  
+XSLT was not designed for use in web applications.  To serve html files, a standard web solution should be found.  XSLT can be used at both the client side or server side, and does not require javascript to be enabled.  XSLT solutions are interoperable with web frameworks such as Django and Rails. 
 
 \section{Implementation}
-There exist free xslt editors such as Treebeard (http://treebeard.sourceforge.net/) and non-free Oxygen (http://www.oxygenxml.com/).  The Saxon xslt processor runs in both.   
+The following are xml examples:
+\begin{itemize}
+\item config file
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8"?>
+<cfg>
+<analysis id="NGS" title="Quality control report of FASTQC data">
+    <method id="QC">
+        <citation>http://www.bioinformatics.com/etc/</citation>
+    </method>
+    <description>We evaluate raw FASTQ to determine qualit issues with each library.
+    </description>
+</analysis>
+<analysis id="genome_alignment" title="Align to ref genome">
+    <method id="bowtie2">
+        <citation>Langmead et al Fast gapped align 2012</citation>
+        <description>ref genome aligner</description>
+    </method>
+</analysis>
+</cfg>
+\end{lstlisting}
+\item authored xml file
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8"?>
+   <report>
+   <title>Variant calling and annotation for Dr.Smith</title>
+   <date>July 9,1985</date>
+   <analysis id="NGS">
+       <method id="QC"></method>
+       </analysis>
+       <analysis id="genome_alignment">
+               <method id="Trim"></method>
+               </analysis>     
+               </report>
+\end{lstlisting}
 
-XSLT can be used to generate table of contents, numbered citations, and link to configuration files.
+\item XSLT uses DOM traversal to select elements.  The context returned by a single selected element is then acted upon by its most specific matching template.
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    exclude-result-prefixes="xs"
+    version="2.0">
+    <xsl:template match="/">
+        <html>
+            <head>
+                <h2>Report for Dr Smith</h2>
+                <div><xsl:value-of  select="current-date()"/></div><br/>
+            </head>
+            <body>
+                <ul>
+                <div>
+                    <xsl:apply-templates select="/report/analysis"/>
+                    <xsl:apply-templates select="/report/analysis/method"/>
+                </div>
+                </ul>
+            </body>
+        </html>
+    </xsl:template>
+    
+    <xsl:template match="analysis">
+        <h3>
+            <xsl:apply-templates select="@id"/>
+        </h3>  
+        <li>
+            <ul><xsl:apply-templates select="/report/analysis/method/@id"></xsl:apply-templates></ul>
+            <!-- <xsl:apply-templates select="{name()}"/> -->
+            <ul><xsl:apply-templates select="document('contentconfig.xml')/cfg/analysis/method[@id= current()/@id]/citation"/></ul>
+        </li>
+    </xsl:template>
+    <!--<xsl:template match="analysis/method[@id='QC']">
+    <li>
+            <xsl:apply-templates select="document('contentconfig.xml')/cfg/analysis/method[@id = 'QC']/citation"/>
+            --><!--<xsl:apply-templates select="document('contentconfig.xml')/analysis/method/{@id}/citation"/>-->
+    
+
+    <xsl:template match="method">
+        <li>
+            <xsl:apply-templates select="document('contentconfig.xml')/cfg/analysis/method[@id= current()/@id]/citation"/>
+        </li>
+    </xsl:template>
+    
+</xsl:stylesheet>
+
+\end{lstlisting}
+
+\item Relax NG, a schema language for xml, can be used to validate authored XML files.  For more complicated validation, such as asserting set membership, Schematron, an xml schema language which finds tree patterns in parsed documents, can be used. 
+
+\item Editors for XSLT come in both free and non-free versions.  Free xslt editors such as Treebeard (http://treebeard.sourceforge.net/) and non-free Oxygen (http://www.oxygenxml.com/) both support the Saxon processor, which provides XSLT, XPath, and XML Schema support.   
 
 Configuration files will be written in xml; as will the authored report files.
 
-Relax NG, a schema language for xml.  It can be used to validate authored xml files.  For more complicated validation, such as asserting set membership, Schematron, an xml schema language which finds tree patterns in parsed documents, can be used. 
+\item CSS, cascading style sheets, is the standard for styling of sections. 
 
-CSS, cascading style sheets, is the standard for styling of sections. 
 
-\begin{lstlisting}
-// Hello.java
-import javax.swing.JApplet;
-import java.awt.Graphics;
-
-public class Hello extends JApplet {
-    public void paintComponent(Graphics g) {
-        g.drawString("Hello, world!", 65, 95);
-    }    
-}
-\end{lstlisting}
-
+\end{itemize}
 
 
 \end{document}

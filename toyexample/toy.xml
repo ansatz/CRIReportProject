@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="file:/home/solver/CRIReportProject/randng.rnc" type="application/relax-ng-compact-syntax"?>
+<?xml-model href="file:/home/solver/CRIReportProject/toyexample/toy.sch" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<report>
+    <title>Variant calling and annotation for Dr.Smith</title>
+    <date>July 1,1985</date>
+    <analysis id="NGS">
+        <method id="QC"></method>
+        <method id="GATK"></method>
+        <method id="QC"></method>
+    </analysis>
+    <analysis id="genome_alignment">
+      <!--<method id="Trim"></method>-->
+        <method id="bowtie2"></method>
+    </analysis>     
+</report>

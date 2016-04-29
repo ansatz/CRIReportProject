@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cfg>
+<analysis id="NGS" title="Quality control report of FASTQC data">
+    <method id="QC">
+        <citation>http://www.bioinformatics.com/etc/</citation>
+    </method>
+    <description>We evaluate raw FASTQ to determine qualit issues with each library.
+    </description>
+</analysis>
+<analysis id="genome_alignment" title="Align to ref genome">
+    <method id="bowtie2">
+        <citation>Langmead et al Fast gapped align 2012</citation>
+        <description>ref genome aligner</description>
+    </method>
+</analysis>
+</cfg>

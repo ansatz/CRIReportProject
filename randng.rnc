@@ -1,0 +1,8 @@
+start= report
+report = element report { title?, date?, analysis+ }
+title = element title { text }
+date = element date { text }
+analysis = element analysis { attribute id { text }, method+ }
+method = element method { attribute id { text }, text }
+
+
