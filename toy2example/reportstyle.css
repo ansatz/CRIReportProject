@@ -1,0 +1,16 @@
+#images{
+    text-align:center;
+    margin:50px auto;
+}
+#images a{
+    margin:0px 20px;
+    display:inline-block;
+    text-decoration:none;
+    color:black;
+}
+table th td {
+    border: dotted orange;
+    border-width: 0.3em 0 9px;
+    width: 100%;
+}
+    

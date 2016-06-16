@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar xmlns="http://relaxng.org/ns/structure/1.0">
+  <start>
+    <ref name="report"/>
+  </start>
+  <define name="report">
+    <element name="report">
+      <optional>
+        <ref name="title"/>
+      </optional>
+      <optional>
+        <ref name="date"/>
+      </optional>
+      <oneOrMore>
+        <ref name="analysis"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="title">
+    <element name="title">
+      <text/>
+    </element>
+  </define>
+  <define name="date">
+    <element name="date">
+      <text/>
+    </element>
+  </define>
+  <define name="analysis">
+    <element name="analysis">
+      <attribute name="id"/>
+      <oneOrMore>
+        <ref name="method"/>
+      </oneOrMore>
+    </element>
+  </define>
+  <define name="method">
+    <element name="method">
+      <attribute name="id"/>
+      <text/>
+    </element>
+  </define>
+</grammar>

@@ -1,0 +1,12 @@
+<report>
+    <title>Variant calling and annotation for Dr.Smith</title>
+    <date>July 1,1985</date>
+    <analysis id="NGS">
+        <method id="QC"></method>
+        <method id="GATK"></method>
+    </analysis>
+    <analysis id="genome_alignment">
+      <!--<method id="Trim"></method>-->
+        <method id="bowtie2"></method>
+    </analysis>     
+</report>
